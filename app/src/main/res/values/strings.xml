@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">TmdbApp</string>
+    <string name="title_favoritemovie">Favorite Movie</string>
+</resources>
