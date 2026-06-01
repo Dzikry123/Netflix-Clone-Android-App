@@ -11,10 +11,10 @@ TMDB Movie App  allows users to discover trending movies, top-rated content, upc
 ## 📱 Application Preview
 
 <p align="center">
+  <img src="screenshots/movie4.jpeg" width="200"/>
   <img src="screenshots/movie1.jpeg" width="200"/>
   <img src="screenshots/movie2.jpeg" width="200"/>
   <img src="screenshots/movie3.jpeg" width="200"/>
-  <img src="screenshots/movie4.jpeg" width="200"/>
 </p>
 
 ---
