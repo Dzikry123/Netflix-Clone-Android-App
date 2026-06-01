@@ -7,6 +7,7 @@ import com.example.core.domain.model.movie.Movie
 import com.example.core.domain.model.movie.MovieDetail
 import com.example.core.domain.usecase.movie.MovieUseCase
 import com.example.core.domain.usecase.movie.detail.MovieDetailUseCase
+import com.example.core.mapper.DatabaseMapper.toMovie
 import com.example.core.utils.K
 import com.example.core.utils.collectAndHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,23 +31,32 @@ class MovieDetailViewModel @Inject constructor(
         observeFavoriteStatus()
     }
 
-    fun onFavoriteToggle(newState: Boolean) = viewModelScope.launch {
-
-        val currentMovie = detailState.value.currentMovie ?: return@launch
+    fun onFavoriteToggle(
+        movieDetail: MovieDetail,
+        newState: Boolean
+    ) = viewModelScope.launch {
 
         useCaseTwo.setFavoriteMovie(
-            currentMovie.copy(isFavorite = newState),
+            movieDetail.toMovie(newState),
             newState
         )
 
         _detailState.update {
             it.copy(
-                isFavorite = newState,
-                currentMovie = currentMovie.copy(
-                    isFavorite = newState
-                )
+                isFavorite = newState
             )
         }
+    }
+
+    fun onMovieFavoriteToggle(
+        movie: Movie,
+        newState: Boolean
+    ) = viewModelScope.launch {
+
+        useCaseTwo.setFavoriteMovie(
+            movie.copy(isFavorite = newState),
+            newState
+        )
     }
 
     private fun observeFavoriteStatus() = viewModelScope.launch {

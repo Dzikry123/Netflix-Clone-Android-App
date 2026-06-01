@@ -6,7 +6,7 @@ data class TvDetail(
     val backdropPath: String,
     val episodeRuntime: List<Int>,
     val firstAirDate: String,
-    val genreIds: List<String>,
+    val genreIds: List<Int>,
     val homepage: String,
     val inProduction: Boolean,
     val languages: List<String>,

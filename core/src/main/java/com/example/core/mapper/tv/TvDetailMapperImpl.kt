@@ -26,8 +26,9 @@ class TvDetailMapperImpl: ApiMapper<TvDetail, TvDetailDto> {
             backdropPath = formatEmptyValue(apiDto.backdropPath),
             episodeRuntime = apiDto?.episodeRunTime?.map { it } ?: emptyList(),
             firstAirDate = formatEmptyValue(apiDto?.firstAirDate),
-            genreIds = apiDto?.genres?.map { formatEmptyValue(it?.name) } ?: emptyList(),
-            homepage = formatEmptyValue(apiDto?.homepage),
+            genreIds = apiDto.genres
+                ?.mapNotNull { it?.id }
+                ?: emptyList(), homepage = formatEmptyValue(apiDto?.homepage),
             inProduction = apiDto?.inProduction ?: false,
             languages = apiDto.languages?.map {
                 formatEmptyValue(it)

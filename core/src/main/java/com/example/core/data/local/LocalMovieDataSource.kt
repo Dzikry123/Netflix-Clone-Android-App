@@ -2,6 +2,9 @@ package com.example.core.data.local
 
 import com.example.core.data.local.entity.MovieEntity
 import com.example.core.data.local.room.MovieDao
+import com.example.core.domain.model.movie.Movie
+import com.example.core.mapper.DatabaseMapper
+import com.example.core.utils.MovieCategory
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -29,14 +32,30 @@ class LocalMovieDataSource @Inject constructor(
     suspend fun insertMovie(movieList: List<MovieEntity>) =
         movieDao.insertMovie(movieList)
 
-    suspend fun setFavoriteMovie(movieId: Int, newState: Boolean) {
+    suspend fun setFavoriteMovie(
+        movie: Movie,
+        newState: Boolean
+    ) {
 
-        val movie = movieDao.getMovieById(movieId)
-            ?: return
+        val localMovie = movieDao.getMovieById(movie.id)
 
-        movie.isFavorite = newState
-        movie.updatedAt = System.currentTimeMillis()
+        if (localMovie == null) {
 
-        movieDao.updateFavoriteMovie(movie)
+            movieDao.insertMovie(
+                listOf(
+                    DatabaseMapper.mapDomainToMovieEntity(
+                        movie,
+                        MovieCategory.SEARCH
+                    )
+                )
+            )
+
+            return
+        }
+
+        localMovie.isFavorite = newState
+        localMovie.updatedAt = System.currentTimeMillis()
+
+        movieDao.updateFavoriteMovie(localMovie)
     }
 }

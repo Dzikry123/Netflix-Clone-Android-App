@@ -66,6 +66,7 @@ import com.example.core.domain.model.tv.ReviewTv
 import com.example.core.domain.model.tv.SeasonModel
 import com.example.core.domain.model.tv.Tv
 import com.example.core.domain.model.tv.TvDetail
+import com.example.core.utils.GenreConstants
 import com.example.core.utils.K
 import com.example.tmdbapp.R
 import com.example.tmdbapp.ui.tv.home.LoadingView
@@ -106,7 +107,8 @@ fun TvDetailScreen(
                         onFavoriteClick = {
 
                             tvDetailViewModel.onFavoriteToggle(
-                                !state.isFavorite
+                                tvDetail = tvDetail,
+                                newState = !state.isFavorite
                             )
                         },
                         onNavigateUp = onNavigateUp
@@ -154,8 +156,8 @@ fun TvDetailScreen(
 
                             onTvClick(tv.id)
                         },
-                        onFavoriteClick = { _, newState ->
-                            tvDetailViewModel.onFavoriteToggle(newState)
+                        onFavoriteClick = { tv, newState ->
+                            tvDetailViewModel.onTvFavoriteToggle(tv, newState)
                         }
                     )
                 }
@@ -280,6 +282,11 @@ fun HeroHeader(
 
 @Composable
 fun TvMetaSection(tv: TvDetail) {
+    val genres = remember(tv.genreIds) {
+        tv.genreIds.map { genreId ->
+            GenreConstants.getGenreNameById(genreId)
+        }
+    }
     Column(modifier = Modifier.padding(vertical = 12.dp)) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -313,9 +320,10 @@ fun TvMetaSection(tv: TvDetail) {
         Spacer(Modifier.height(8.dp))
 
         Text(
-            text = tv.genreIds.joinToString(" • "),
+            text = genres.joinToString(" • "),
             style = MaterialTheme.typography.bodySmall,
-            color = Color.LightGray
+            color = Color.LightGray,
+            modifier = Modifier.padding(bottom = 8.dp)
         )
     }
 }

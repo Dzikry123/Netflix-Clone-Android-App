@@ -13,6 +13,8 @@ import com.example.core.utils.Response
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 
 class MovieDetailRepositoryImpl(
     private val movieDetailApiService: MovieDetailApiService,
@@ -37,21 +39,26 @@ class MovieDetailRepositoryImpl(
         }
     }
 
-    override fun getMovieDetailById(id: Int): Flow<Response<Movie?>> = flow {
+    override fun getMovieDetailById(
+        id: Int
+    ): Flow<Response<Movie?>> {
 
-        emit(Response.Loading())
+        return localMovieDataSource
+            .getFavoriteMovieById(id)
+            .map { entity ->
 
-        localMovieDataSource.getFavoriteMovieById(id).collect { entity ->
-
-            val movie = entity?.let {
-                DatabaseMapper.mapMovieEntityToDomain(it)
+                Response.Success(
+                    entity?.let {
+                        DatabaseMapper.mapMovieEntityToDomain(it)
+                    }
+                ) as Response<Movie?>
             }
-
-            emit(Response.Success(movie))
-        }
-
-    }.catch { e ->
-        emit(Response.Error(e))
+            .onStart {
+                emit(Response.Loading())
+            }
+            .catch { e ->
+                emit(Response.Error(e))
+            }
     }
 
     override suspend fun setFavoriteMovie(
@@ -59,7 +66,7 @@ class MovieDetailRepositoryImpl(
         state: Boolean
     ) {
         localMovieDataSource.setFavoriteMovie(
-            movieId = movie.id,
+            movie = movie,
             newState = state
         )
     }

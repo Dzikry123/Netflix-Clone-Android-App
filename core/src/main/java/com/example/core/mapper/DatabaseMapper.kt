@@ -5,6 +5,7 @@ import com.example.core.data.local.entity.TvEntity
 import com.example.core.domain.model.movie.Movie
 import com.example.core.domain.model.movie.MovieDetail
 import com.example.core.domain.model.tv.Tv
+import com.example.core.domain.model.tv.TvDetail
 
 object DatabaseMapper {
     fun mapMovieEntitiesToDomain(entity: List<MovieEntity>): List<Movie> =
@@ -106,6 +107,26 @@ object DatabaseMapper {
         )
     }
 
+    fun TvDetail.toTv(isFavorite: Boolean): Tv {
+        return Tv(
+            id = id,
+            name = name,
+            posterPath = posterPath,
+            backdropPath = backdropPath,
+            overview = overview,
+            voteAverage = voteAverage,
+            genreIds = genreIds,
+            popularity = popularity,
+            originalLanguage = originalLanguage,
+            originalName = originalName,
+            voteCount = voteCount,
+            isFavorite = isFavorite,
+            firstAirDate = firstAirDate,
+            originCountry = originalCountry,
+            softcore = softcore
+        )
+    }
+
     fun mapDomainToEntity(domain: Movie): MovieEntity =
         MovieEntity(
             backdropPath = domain.backdropPath,
@@ -127,4 +148,53 @@ object DatabaseMapper {
 
             updatedAt = System.currentTimeMillis()
         )
+
+    fun mapDomainToMovieEntity(
+        movie: Movie,
+        category: String
+    ): MovieEntity {
+        return MovieEntity(
+            id = movie.id,
+            backdropPath = movie.backdropPath,
+            genreIds = movie.genreIds,
+            originalLanguage = movie.originalLanguage,
+            originalTitle = movie.originalTitle,
+            overview = movie.overview,
+            popularity = movie.popularity,
+            posterPath = movie.posterPath,
+            releaseDate = movie.releaseDate,
+            title = movie.title,
+            voteAverage = movie.voteAverage,
+            voteAccount = movie.voteAccount,
+            video = movie.video,
+            isFavorite = movie.isFavorite,
+            category = category,
+            updatedAt = System.currentTimeMillis()
+        )
+    }
+
+    fun mapDomainToTvEntity(
+        tv: Tv,
+        category: String
+    ): TvEntity {
+        return TvEntity(
+            id = tv.id,
+            backdropPath = tv.backdropPath,
+            genreIds = tv.genreIds,
+            originalLanguage = tv.originalLanguage,
+            originalName = tv.originalName,
+            overview = tv.overview,
+            popularity = tv.popularity,
+            posterPath = tv.posterPath,
+            softcore = tv.softcore,
+            name = tv.name,
+            voteAverage = tv.voteAverage,
+            voteCount = tv.voteCount,
+            isFavorite = tv.isFavorite,
+            category = category,
+            updatedAt = System.currentTimeMillis(),
+            firstAirDate = tv.firstAirDate,
+            originCountry = tv.originCountry
+        )
+    }
 }

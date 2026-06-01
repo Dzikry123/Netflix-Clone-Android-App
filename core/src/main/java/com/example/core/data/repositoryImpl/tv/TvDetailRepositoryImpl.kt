@@ -65,7 +65,7 @@ class TvDetailRepositoryImpl(
         state: Boolean
     ) {
         localTvDataSource.setFavoriteTv(
-            tvId = tv.id,
+            tv = tv,
             newState = state
         )
     }

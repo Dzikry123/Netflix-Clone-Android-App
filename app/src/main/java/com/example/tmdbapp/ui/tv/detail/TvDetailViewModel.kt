@@ -8,6 +8,7 @@ import com.example.core.domain.model.tv.Tv
 import com.example.core.domain.model.tv.TvDetail
 import com.example.core.domain.usecase.tv.TvUseCase
 import com.example.core.domain.usecase.tv.detail.TvDetailUseCase
+import com.example.core.mapper.DatabaseMapper.toTv
 import com.example.core.utils.K
 import com.example.core.utils.collectAndHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,23 +35,33 @@ class TvDetailViewModel @Inject constructor(
         observeFavoriteStatus()
     }
 
-    fun onFavoriteToggle(newState: Boolean) = viewModelScope.launch {
-
-        val currentMovie = detailState.value.currentTv ?: return@launch
+    fun onFavoriteToggle(
+        tvDetail: TvDetail,
+        newState: Boolean
+    ) = viewModelScope.launch {
 
         useCaseTwo.setFavoriteTv(
-            currentMovie.copy(isFavorite = newState),
+            tvDetail.toTv(newState),
             newState
         )
 
         _detailState.update {
             it.copy(
-                isFavorite = newState,
-                currentTv = currentMovie.copy(
-                    isFavorite = newState
-                )
+                isFavorite = newState
             )
         }
+    }
+
+
+    fun onTvFavoriteToggle(
+        tv: Tv,
+        newState: Boolean
+    ) = viewModelScope.launch {
+
+        useCaseTwo.setFavoriteTv(
+            tv.copy(isFavorite = newState),
+            newState
+        )
     }
 
     private fun observeFavoriteStatus() = viewModelScope.launch {

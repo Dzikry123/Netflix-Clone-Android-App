@@ -138,7 +138,7 @@ class MovieRepositoryImpl(
         state: Boolean
     ) {
         localMovieDataSource.setFavoriteMovie(
-            movieId = movie.id,
+            movie = movie,
             newState = state
         )
     }

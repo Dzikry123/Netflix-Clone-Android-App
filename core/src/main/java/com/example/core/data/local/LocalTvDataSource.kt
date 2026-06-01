@@ -2,6 +2,9 @@ package com.example.core.data.local
 
 import com.example.core.data.local.entity.TvEntity
 import com.example.core.data.local.room.TvDao
+import com.example.core.domain.model.tv.Tv
+import com.example.core.mapper.DatabaseMapper
+import com.example.core.utils.TvCategory
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -29,14 +32,27 @@ class LocalTvDataSource @Inject constructor(
     suspend fun insertTv(tvList: List<TvEntity>) =
         tvDao.insertTv(tvList)
 
-    suspend fun setFavoriteTv(tvId: Int, newState: Boolean) {
+    suspend fun setFavoriteTv(tv: Tv, newState: Boolean) {
 
-        val tv = tvDao.getTvById(tvId)
-            ?: return
+        val localTv = tvDao.getTvById(tv.id)
 
-        tv.isFavorite = newState
-        tv.updatedAt = System.currentTimeMillis()
+        if (localTv == null) {
 
-        tvDao.updateFavoriteTv(tv)
+            tvDao.insertTv(
+                listOf(
+                    DatabaseMapper.mapDomainToTvEntity(
+                        tv,
+                        TvCategory.SEARCH
+                    )
+                )
+            )
+
+            return
+        }
+
+        localTv.isFavorite = newState
+        localTv.updatedAt = System.currentTimeMillis()
+
+        tvDao.updateFavoriteTv(localTv)
     }
 }

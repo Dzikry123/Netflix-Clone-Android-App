@@ -108,7 +108,8 @@ fun MovieDetailScreen(
                             val newState = !state.isFavorite
 
                             movieDetailViewModel.onFavoriteToggle(
-                                !state.isFavorite
+                                movieDetail = movieDetail,
+                                newState = !state.isFavorite
                             )
 
 //                            isFavorite = !isFavorite
@@ -163,8 +164,11 @@ fun MovieDetailScreen(
 
                             onMovieClick(movie.id)
                         },
-                        onFavoriteClick = { _, newState ->
-                            movieDetailViewModel.onFavoriteToggle(newState)
+                        onFavoriteClick = { movie, newState ->
+                            movieDetailViewModel.onMovieFavoriteToggle(
+                                movie,
+                                newState
+                            )
                         }
                     )
                 }
