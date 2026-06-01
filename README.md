@@ -254,4 +254,5 @@ This product uses the TMDB API but is not endorsed or certified by TMDB.
 
 # 👨‍💻 Author
 - Dzikry Habibie
+- LinkedIn : https://www.linkedin.com/in/dzikryhabibie/
 - Developed with Kotlin and Jetpack Compose as a modern Android learning project focusing on scalable architecture, clean code practices, and maintainable software design.
