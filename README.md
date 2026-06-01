@@ -28,7 +28,7 @@ TMDB Movie App  allows users to discover trending movies, top-rated content, upc
 ## 🎬 GIF Preview
 
 <p align="center">
-  <img src="screenshots/gif.mp4" width="300"/>
+  <img src="screenshots/movie.gif" width="300"/>
 </p>
 
 # ✨ Features
